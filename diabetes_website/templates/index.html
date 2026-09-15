@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Diabetes Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- Header -->
+
+        <header class="header">
+
+            <div class="logo">
+                🩺
+            </div>
+
+            <div>
+                <h1>Diabetes Prediction</h1>
+
+                <p>
+                    Enter patient information to generate a prediction
+                </p>
+            </div>
+
+        </header>
+
+
+        <!-- Main Card -->
+
+        <main class="card">
+
+            <form action="/predict" method="POST">
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+
+                        <label>Pregnancies</label>
+
+                        <input
+                            type="number"
+                            name="pregnancies"
+                            placeholder="e.g. 2"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Glucose</label>
+
+                        <input
+                            type="number"
+                            name="glucose"
+                            placeholder="e.g. 120"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Blood Pressure</label>
+
+                        <input
+                            type="number"
+                            name="blood_pressure"
+                            placeholder="e.g. 70"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Skin Thickness</label>
+
+                        <input
+                            type="number"
+                            name="skin_thickness"
+                            placeholder="e.g. 20"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Insulin</label>
+
+                        <input
+                            type="number"
+                            name="insulin"
+                            placeholder="e.g. 80"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>BMI</label>
+
+                        <input
+                            type="number"
+                            step="0.1"
+                            name="bmi"
+                            placeholder="e.g. 25.5"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Diabetes Pedigree</label>
+
+                        <input
+                            type="number"
+                            step="0.001"
+                            name="diabetes_pedigree"
+                            placeholder="e.g. 0.627"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Age</label>
+
+                        <input
+                            type="number"
+                            name="age"
+                            placeholder="e.g. 35"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit">
+
+                    Check Prediction
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            {% if result %}
+
+            <!-- Result -->
+
+            <section class="result-card">
+
+                <p class="result-label">
+                    Prediction Result
+                </p>
+
+                <h2 class="{% if result == 'Diabetes' %}danger{% else %}safe{% endif %}">
+                    {{ result }}
+                </h2>
+
+
+                {% if confidence is not none %}
+
+                <div class="confidence">
+
+                    <div class="confidence-header">
+
+                        <span>Confidence</span>
+
+                        <strong>
+                            {{ "%.1f"|format(confidence) }}%
+                        </strong>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-bar"
+                            style="width: {{ confidence }}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <p class="no-confidence">
+                    Confidence percentage is not available for this SVM model.
+                </p>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Report -->
+
+            <section class="report">
+
+                <div class="report-header">
+
+                    <div>
+                        <p class="report-label">Patient Report</p>
+                        <h3>Entered Information</h3>
+                    </div>
+
+                    <span class="report-icon">📋</span>
+
+                </div>
+
+
+                <div class="report-grid">
+
+                    {% for name, value in patient_data.items() %}
+
+                    <div class="report-item">
+
+                        <span>{{ name }}</span>
+
+                        <strong>{{ value }}</strong>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="notice">
+
+                    <strong>Note:</strong>
+                    This prediction is for educational purposes and
+                    should not be used as a medical diagnosis.
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+        </main>
+
+
+        <footer>
+
+            Diabetes Prediction System • Machine Learning Project
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
